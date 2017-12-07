@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/comm.css">
+<script src="../../jquery/jquery-1.11.1.min.js"></script>
+
+<link href="../../dtree/dtree.css" rel="stylesheet">
+<script src="../../dtree/dtree.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<style>
+#content {
+	background: white;
+	padding: 10px 20px;
+	min-height:650px;
+}
+
+.input_box {
+	padding: 8px;
+	background: #ececec;
+	border-radius: 4px;
+}
+
+#left>*, #right>* {
+	margin-top: 10px;
+}
+
+#right .cat_tag {
+	padding: 10px;
+	border-radius: 4px;
+	background: #ececec;
+	color: gray;
+}
+
+thead {
+	background: #ececec;
+}
+
+.navbar-brand {
+	padding: 5px;
+}
+
+.navbar-brand img {
+	height: 40px;
+}
+</style>
+
+
+<script>
+	$(function() {
+
+		//从服务端获取的分类的json数组
+		var catArr = [ {
+			id : 0,
+			level : 1,
+			name : "知识库分类",
+			subCat : [ {
+				id : 1,
+				level : 2,
+				name : "IT前沿",
+				subCat : [ {
+					id : 3,
+					level : 1,
+					name : "知识库分类"
+				}, {
+					id : 4,
+					level : 3,
+					name : "知识库分类"
+				} ]
+			}, {
+				id : 5,
+				level : 2,
+				name : "IT开发"
+			}, {
+				id : 3,
+				level : 2,
+				name : "WEB前端课程"
+			} ]
+		} ];
+
+		d = new dTree('d');
+
+		for (var i = 0; i < catArr.length; i++) {
+			d.add(catArr[i].id, -1, catArr[i].name);
+			for (var j = 0; j < catArr[i].subCat.length; j++) {
+				d.add(catArr[i].subCat[j].id, catArr[i].id,
+						catArr[i].subCat[j].name, "javascript:checkTree('"
+								+ catArr[i].subCat[j].name + "')", '', '',
+						'../../dtree/img/folder.gif');
+				if (catArr[i].subCat[j].subCat != null) {
+					for (var k = 0; k < catArr[i].subCat[j].subCat.length; k++) {
+						d.add(catArr[i].subCat[j].subCat[k].id,
+								catArr[i].subCat[j].id,
+								catArr[i].subCat[j].subCat[k].name,
+								"javascript:checkTree('"
+										+ catArr[i].subCat[j].subCat[k].name
+										+ "')");
+					}
+				}
+			}
+		}
+		//param:1节点id,2父节点id,3节点显示文本
+		//            d.add(0, -1, '知识库分类');
+		//
+		//            d.add(1, 0, 'IT前沿(17)', 'javascript:checkTree("IT前沿")', 'IT前沿',
+		//                    '', '../../dtree/img/folder.gif');
+		//            d.add(2, 0, 'IT开发(17)', 'javascript:checkTree("IT开发")', 'IT开发',
+		//                    '', '../../dtree/img/folder.gif');
+		//            d.add(3, 0, 'WEB前端课程(17)', 'javascript:checkTree("WEB前端课程")', 'WEB前端课程',
+		//                    '', '../../dtree/img/folder.gif');
+		//
+		//
+		//            d.add(4, 2, '互联网(17)', 'javascript:checkTree("互联网")', '互联网',
+		//                    '', '../../dtree/img/folder.gif');
+
+		var dStr = d.toString();
+
+		$("#dTree").append(dStr);
+	})
+
+	function checkTree(catName) {
+		$("#catName").text(catName);
+	}
+</script>
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"> <img src="../img/logo.png">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">首页</a></li>
+					<li><a href="#">课程</a></li>
+					<li><a href="#">计划</a></li>
+					<li><a href="#">知识</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">更多 <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">咨询</a></li>
+							<li><a href="#">培训</a></li>
+						</ul></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#">登录</a></li>
+					<li><a href="#">注册</a></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+
+	<div class="container" id="content">
+		<div class="row">
+			<div class="col-md-3 " id="left">
+				<div class="input_box">
+					<div class="input-group">
+						<input type="text" class="form-control"
+							placeholder="Search for..."> <span
+							class="input-group-btn">
+							<button class="btn btn-default" type="button">Go!</button>
+						</span>
+					</div>
+					<!-- /input-group -->
+				</div>
+				<!-- /.col-lg-6 -->
+
+				<button type="button"
+					class="btn btn-primary btn-sm btn-block share_btn">
+					<span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+					分享
+				</button>
+
+				<div>
+					<div id="dTree"></div>
+				</div>
+			</div>
+			<div class="col-md-9" id="right">
+				<p class="cat_tag" id="catName">IT前沿</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>类型</th>
+							<th>名称</th>
+							<th>更新时间</th>
+							<th>发布者</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr>
+							<td>类型</td>
+							<td>名称</td>
+							<td>更新时间</td>
+							<td>发布者</td>
+						</tr>
+						<tr>
+							<td>类型</td>
+							<td>名称</td>
+							<td>更新时间</td>
+							<td>发布者</td>
+						</tr>
+						<tr>
+							<td>类型</td>
+							<td>名称</td>
+							<td>更新时间</td>
+							<td>发布者</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>
